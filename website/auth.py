@@ -6,8 +6,17 @@ from . import db
 auth = Blueprint('auth', __name__)
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
-    data = request.form
-    print(data)
+    email = request.form.get('email')
+    password = request.form.get('password')
+    user = User.query.filter_by(email = email).first()
+    if user:
+        if user.password == password:
+            flash("loggin successful", category="success")
+            return redirect(url_for('views.homePage'))
+        else:
+            flash("wrong password", category="error")
+    else:
+        flash("wrong email", category="error")
     return render_template("login2.html")
 
 @auth.route('/logout')
@@ -22,7 +31,11 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        if len(email) < 4:
+        user = User.query.filter_by(email=email).first()
+        if user:
+            flash("email already exist", category="error")
+            pass
+        elif len(email) < 4:
             flash("invalid email", category="error")
             pass
         elif len(firstName) < 4:
