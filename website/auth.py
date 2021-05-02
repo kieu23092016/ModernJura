@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import User
+# from werkzeug import generate_password_hash, check_password_hash
+from . import db
 
 auth = Blueprint('auth', __name__)
 @auth.route('/login', methods = ['GET', 'POST'])
@@ -29,8 +32,12 @@ def sign_up():
             flash("password dont match", category="error")
             pass
         else:
+            "hash - tạo hashpassword chỉ có thể kiểm tra password đúng bằng cách chuyển pass-> hashpass?? for what "
+            new_user = User(email=email, password=password1)
+            db.session.add(new_user)
+            db.session.commit()
             flash("account created", category="success")
             #add user to database
-            pass
+            return redirect(url_for('auth.login'))
 
     return render_template("sign-up.html")
