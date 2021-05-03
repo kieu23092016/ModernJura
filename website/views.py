@@ -16,3 +16,12 @@ def homePage():
 @views.route('/search')
 def search():
     return render_template("search.html")
+
+@views.route('/SnakePage')
+def snakePage():
+    return render_template("SnakePage.html")
+
+@views.route('/SnakePlay')
+def snakePlay():
+    return render_template("Snake.html")
+
