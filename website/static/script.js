@@ -2,7 +2,7 @@ var button = document.getElementsByClassName("btn btn-primary");
 function switchPage(){
     document.location.href = "ticTacToe.html";
 }
-button[1].addEventListener("click", switchPage);
+button[0].addEventListener("click", switchPage);
 
 
 
