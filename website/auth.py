@@ -49,7 +49,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                return render_template("user.html")
+                return render_template("user_home.html")
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
@@ -68,7 +68,7 @@ def resetPassword():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('views.homePage'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -180,3 +180,6 @@ def confirm_email(token):
             return redirect(url_for('auth.login'))
     # ------------------------------------------------------------------------------------------------------------------
     return render_template("forgotPass.html")
+@auth.route('/user_profile', methods=['GET', 'POST'])
+def user():
+    return render_template("user.html")
