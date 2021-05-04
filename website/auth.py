@@ -22,7 +22,7 @@ PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*\d)[A-Za-z\d@$!#%*?&]{6,10}$"
 
 """server send email to users----------------------------------------------------------------------------------------"""
 MAIL_SERVER = "smtp.gmail.com"
-MAIL_PORT = 587
+MAIL_PORT = 465
 EMAIL_ADDRESS = 'modernjura0503@gmail.com'
 EMAIL_PASSWORD = 'modernjura03052021'
 # EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
@@ -34,30 +34,6 @@ auth = Blueprint('auth', __name__)
 
 s = URLSafeTimedSerializer('Thisisasecret!')
 
-@auth.route('/confirm_email/<token>')
-def confirm_email(token):
-    """ this function to reset password for user when user forgot """
-    # this token just active in 300s
-    email = s.loads(token, salt='email-confirm', max_age=300)
-    print(email)
-
-    # newPassword1 = request.form.get('newPassword1')
-    # newPassword2 = request.form.get('newPassword2')
-    #
-    # """kiểm tra password hợp lệ-chỗ này cần chỉnh thêm file html-----------------------------------------------------"""
-    # if re.search(PASSWORD_PATTERN, newPassword1) is None:
-    #     flash('Password must be from 6-10 characters, have a digit must occur at least , '
-    #           'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
-    #           category='error')
-    # elif newPassword1 != newPassword2:
-    #     flash('Passwords don\'t match.', category='error')
-    # else:
-    #     user = User.query.filter_by(email=email).first()
-    #     user.password = newPassword1
-    #     db.session.commit()
-    # ------------------------------------------------------------------------------------------------------------------
-    return 'the token works: '
-
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -67,33 +43,6 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # gửi email xác nhận đến người dùng-----------------------------------------------------------------------------
-        # verify_code = random.randint(100001, 999999)
-        # print(str(verify_code))
-
-        token = s.dumps(email, salt='email-confirm')
-        print("this is the token: " + token)
-        confirm_address = "http://127.0.0.1:5000/confirm_email/" + token
-
-        message = EmailMessage()
-        message['Subject'] = 'Welcome to Modern Jura!'
-        message['From'] = EMAIL_ADDRESS
-        message['To'] = email
-        message.set_content('Please confirm your email by following links')
-        message.add_alternative("""\
-        <!DOCTYPE html>
-        <html>
-            <p>
-                <a href="""+confirm_address+"""> Click here </a> to reset your password 
-            </p>
-        </html>
-        """, subtype='html')
-
-        # message.set_content('This is your verify code.\n' + str(verify_code))
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            smtp.send_message(message)
         # --------------------------------------------------------------------------------------------------------------
         user = User.query.filter_by(email=email).first()
         if user:
@@ -156,3 +105,78 @@ def sign_up():
             return redirect(url_for('auth.login'))
 
     return render_template("sign-up.html")
+
+
+@auth.route('/getEmail', methods = ['GET', 'POST'])
+def getEmail():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if re.search(EMAIL_PATTERN, email) is None:
+            print("email is invalid.")
+        else:
+            user = User.query.filter_by(email=email).first()
+            #print(user)
+            if user:
+                # gửi email xác nhận đến người dùng-----------------------------------------------------------------------------
+                # verify_code = random.randint(100001, 999999)
+                # print(str(verify_code))
+
+                token = s.dumps(email, salt='email-confirm')
+                print("this is the token: " + token)
+                confirm_address = "http://127.0.0.1:5000/confirm_email/" + token
+
+                message = EmailMessage()
+                message['Subject'] = 'Welcome to Modern Jura!'
+                message['From'] = EMAIL_ADDRESS
+                message['To'] = email
+                message.set_content('Please confirm your email by following links')
+                message.add_alternative("""\
+                        <!DOCTYPE html>
+                        <html>
+                            <p>
+                                <a href=""" + confirm_address + """> Click here </a> to reset your password 
+                            </p>
+                        </html>
+                        """, subtype='html')
+
+                # message.set_content('This is your verify code.\n' + str(verify_code))
+
+                with smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT) as smtp:
+                    smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+                    smtp.send_message(message)
+        # user = User.query.filter_by(email=email).first()
+        # print(user)
+        #print(email)
+    return render_template("getEmail.html")
+
+
+@auth.route('/confirm_email/<token>', methods = ['GET', 'POST'])
+def confirm_email(token):
+    """ this function to reset password for user when user forgot """
+    # this token just active in 300s
+    if request.method == "POST":
+        email = s.loads(token, salt='email-confirm', max_age=300)
+        print(email)
+        user = User.query.filter_by(email=email).first()
+
+        newPassword1 = request.form.get('newPassword1')
+        newPassword2 = request.form.get('newPassword2')
+
+        print(user)
+        if user:
+            """kiểm tra password hợp lệ-chỗ này cần chỉnh thêm file html-----------------------------------------------------"""
+            if re.search(PASSWORD_PATTERN, newPassword1) is None:
+                flash('Password must be from 6-10 characters, have a digit must occur at least , '
+                      'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
+                      category='error')
+            elif newPassword1 != newPassword2:
+                flash('Passwords don\'t match.', category='error')
+            else:
+                user.password = newPassword1
+                db.session.commit()
+                print(user.password)
+                print("đang thay đổi đây.............")
+                flash('Change password successfully!.', category='error')
+            return redirect(url_for('auth.login'))
+    # ------------------------------------------------------------------------------------------------------------------
+    return render_template("forgotPass.html")
