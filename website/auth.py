@@ -1,5 +1,10 @@
-import os
-import random
+"""this file include:
+    login,
+    sign up,
+    logout,
+    reset password,
+    validate email of users"""
+
 import re
 import smtplib
 
@@ -28,41 +33,35 @@ EMAIL_PASSWORD = 'modernjura03052021'
 # EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 # EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 
-#-----------------------------------------------------------------------------------------------------------------------
+s = URLSafeTimedSerializer('Thisisasecret!')
+
+# -----------------------------------------------------------------------------------------------------------------------
 
 auth = Blueprint('auth', __name__)
 
-s = URLSafeTimedSerializer('Thisisasecret!')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # if current_user.is_authenticated:
-        #     return redirect(url_for('views.homePage'))
+        if current_user.is_authenticated:
+            return redirect(url_for('views.home'))
 
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # --------------------------------------------------------------------------------------------------------------
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                return render_template("user_home.html")
+                return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
 
-    return render_template("login2.html")
+    return render_template("login2.html", user=current_user)
 
-@auth.route('/reset_password')
-def resetPassword():
-
-    email = request.form.get('email')
-    password1 = request.form.get('password1')
-    password2 = request.form.get('password2')
 
 @auth.route('/logout')
 @login_required
@@ -70,11 +69,12 @@ def logout():
     logout_user()
     return redirect(url_for('views.homePage'))
 
+
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
         if current_user.is_authenticated:
-            return redirect(url_for('views.homePage'))
+            return redirect(url_for('views.home'))
 
         email = request.form.get('email')
         firstName = request.form.get('firstName')
@@ -107,7 +107,7 @@ def sign_up():
     return render_template("sign-up.html")
 
 
-@auth.route('/getEmail', methods = ['GET', 'POST'])
+@auth.route('/getEmail', methods=['GET', 'POST'])
 def getEmail():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -115,7 +115,7 @@ def getEmail():
             print("email is invalid.")
         else:
             user = User.query.filter_by(email=email).first()
-            #print(user)
+            # print(user)
             if user:
                 # gửi email xác nhận đến người dùng-----------------------------------------------------------------------------
                 # verify_code = random.randint(100001, 999999)
@@ -123,7 +123,7 @@ def getEmail():
 
                 token = s.dumps(email, salt='email-confirm')
                 print("this is the token: " + token)
-                confirm_address = "http://127.0.0.1:5000/confirm_email/" + token
+                confirm_address = "http://127.0.0.1:5000/reset_password/" + token
 
                 message = EmailMessage()
                 message['Subject'] = 'Welcome to Modern Jura!'
@@ -144,14 +144,16 @@ def getEmail():
                 with smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT) as smtp:
                     smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
                     smtp.send_message(message)
+                flash("We've send you a link to reset your password."
+                      " This link is only active in 5 minutes. Please check your email.", category="success")
         # user = User.query.filter_by(email=email).first()
         # print(user)
-        #print(email)
+        # print(email)
     return render_template("getEmail.html")
 
 
-@auth.route('/confirm_email/<token>', methods = ['GET', 'POST'])
-def confirm_email(token):
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
     """ this function to reset password for user when user forgot """
     # this token just active in 300s
     if request.method == "POST":
@@ -170,16 +172,13 @@ def confirm_email(token):
                       'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
                       category='error')
             elif newPassword1 != newPassword2:
-                flash('Passwords don\'t match.', category='error')
+                flash('Passwords don\'t match.', category='success')
             else:
-                user.password = newPassword1
+                user.password = generate_password_hash(newPassword1, method='sha256')
                 db.session.commit()
                 print(user.password)
                 print("đang thay đổi đây.............")
-                flash('Change password successfully!.', category='error')
+                flash('Change password successfully!.', category='success')
             return redirect(url_for('auth.login'))
     # ------------------------------------------------------------------------------------------------------------------
     return render_template("forgotPass.html")
-@auth.route('/user_profile', methods=['GET', 'POST'])
-def user():
-    return render_template("user.html")
