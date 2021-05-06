@@ -77,16 +77,19 @@ def sign_up():
             return redirect(url_for('views.home'))
 
         email = request.form.get('email')
-        firstName = request.form.get('firstName')
+        userName = request.form.get('userName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
+
         if user:
             flash('Email already exists.', category='error')
+        elif User.query.filter_by(userName=userName).first():
+            flash('This user name is already exists. Please choose another name.', category='error')
         elif re.search(EMAIL_PATTERN, email) is None:
             flash('Email is invalid.', category='error')
-        elif re.search(USERNAME_PATTERN, firstName) is None:
+        elif re.search(USERNAME_PATTERN, userName) is None:
             flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
         elif re.search(PASSWORD_PATTERN, password1) is None:
             flash('Password must be from 6-10 characters, have a digit must occur at least , '
@@ -96,7 +99,7 @@ def sign_up():
             flash('Passwords don\'t match.', category='error')
         else:
             """hash - tạo hash password chỉ có thể kiểm tra password đúng bằng cách chuyển pass-> hashpass?? for what"""
-            new_user = User(email=email, first_name=firstName,
+            new_user = User(email=email, userName=userName,
                             password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
