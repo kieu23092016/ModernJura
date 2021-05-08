@@ -23,7 +23,7 @@ def homePage():
 # user------------------------------------------------------------------------
 @views.route('/home', methods=['GET', 'POST'])
 def home():
-    return render_template('user_home.html')
+    return render_template('logintoUser.html')
 
 
 @views.route('/user_profile', methods=['GET', 'POST'])
