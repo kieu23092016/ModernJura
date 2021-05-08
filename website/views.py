@@ -7,7 +7,7 @@
 "blue print - include URL defined"
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
-from .models import Game, Img, User
+from .models import Game, User
 from . import db
 views = Blueprint('views', __name__)
 "run this function whenever go to / route"
@@ -33,11 +33,6 @@ def user(id):
     user = User.query.get(id)
     return render_template("user.html", user = user)
 
-
-@views.route('/settings/<id>', methods=['GET', 'POST'])
-def settings(id):
-    user = User.query.get(id)
-    return render_template("settings.html", user = user)
 
 # search------------------------------------------------------------------------
 

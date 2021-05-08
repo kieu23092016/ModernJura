@@ -4,7 +4,7 @@
     logout,
     reset password,
     validate email of users"""
-
+import os
 import re
 import smtplib
 
@@ -16,6 +16,10 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 from email.message import EmailMessage
 from itsdangerous import URLSafeTimedSerializer
+
+"""setting-----------------------------------------------------------------------------------------------------------"""
+VIEW_ROOT = os.path.dirname(os.path.abspath(__file__)) # phuc vu cho upload anh
+
 
 """test validation---------------------------------------------------------------------------------------------------"""
 # contains alphabets, digits and dash, from 3 to 16 characters
@@ -185,3 +189,99 @@ def reset_password(token):
             return redirect(url_for('auth.login'))
     # ------------------------------------------------------------------------------------------------------------------
     return render_template("forgotPass.html")
+
+
+@auth.route('/settings/<id>', methods=['GET', 'POST'])
+def settings(id):
+    user = User.query.get(id)
+    if request.method == 'POST':
+        avatar = request.files.get('avatar')
+
+        userName = request.form.get('userName')
+        dateOfBirth = request.form.get('dateOfBirth')
+        genre = request.form.get('genre')
+        country = request.form.get('country')
+        summary = request.form.get('bio')
+
+        email = request.form.get('email')
+        password = request.form.get('password')
+        password2 = request.form.get('password2')
+
+        # userName, date of birth, email, password, password 2
+        duplicateUsername = User.query.filter_by(userName=userName).first()
+        duplicateEmail = User.query.filter_by(email=email).first()
+        if duplicateUsername and (duplicateUsername != user):
+            print(1)
+            #flash('This user name is already exists. Please choose another name.', category='error')
+        elif duplicateEmail and (duplicateEmail != user):
+            print(2)
+            flash('Email already exists.', category='error')
+        elif re.search(EMAIL_PATTERN, email) is None:
+            print(3)
+            flash('Email is invalid.', category='error')
+        elif re.search(USERNAME_PATTERN, userName) is None:
+            print(4)
+            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+        elif re.search(PASSWORD_PATTERN, password) is None:
+            print(5)
+            flash('Password must be from 6-10 characters, have a digit must occur at least , '
+                  'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
+                  category='error')
+        elif password != password2:
+            print(6)
+            flash('Passwords don\'t match.', category='error')
+        else:
+            print(7)
+            user.userName = userName
+            user.email = email
+            user.password = generate_password_hash(password, method='sha256')
+            user.genre = genre
+            print(8)
+            print(avatar)
+            if avatar:
+                upload_avatar(id, avatar)
+                print(9)
+
+            if dateOfBirth:
+                #print("kiểu của dữ liệu truyền vào ô date of birth:", dateOfBirth.content_type)
+                #user.dateOfBirth = dateOfBirth
+                print(10)
+
+            if country:
+                user.country = country
+                print(11)
+
+            if summary:
+                user.bio = summary
+                print(12)
+
+            db.session.commit()
+            print(13)
+    return render_template("settings.html", user=user)
+
+
+def upload_avatar(userID, upload_a):
+    target = os.path.join(VIEW_ROOT, 'static\\images\\user_avatars')
+    print(target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    else:
+        print('couldn\'t create upload directory: {}'.format(target))
+    # upload_a = request.files.get('file')
+    print("{} is the file name".format(upload_a.filename))
+    # match dùng để kiểm tra tệp có hợp lệ không
+    match = ["image/jpeg", "image/png", "image/jpg", "image/gif"]
+    filetype = upload_a.content_type
+    # print("Đây là loại của tệp nhaaaaaaaaaaaaaaaaaaaaaaaaa: ", filetype)
+    if not ((filetype == match[0]) or (filetype == match[1]) or (filetype == match[2]) or (filetype == match[3])):
+        print("------------------wrong type----------------")
+    else:
+        player = User.query.filter_by(id=userID).first()
+        avt_name = "user" + str(player.id) + ".jpg"
+        destination = "/".join([target, avt_name])
+        # lưu ảnh vào folder đã chọn
+        upload_a.save(destination)
+        # lưu ảnh vào cơ sở dữ liệu
+        player.avatar = avt_name
+        db.session.commit()
+        print("this file upload successfully!")
