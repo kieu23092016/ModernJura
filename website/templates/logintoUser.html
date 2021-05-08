@@ -28,9 +28,13 @@
                         </li>
                         
                         
-
+{%if user.is_authenticated %}
+                        <p>user</p>
+                        {%else%}
+                        <p>not use</p>
+                        {%endif%}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" style="color: black;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" style="color: black;" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 GENRES
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -58,12 +62,11 @@
                           <img src="../static/images/ava.png" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="50" width="50">
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="../templates/user.html">Personal Page</a></li>
-                          <li><a class="dropdown-item" href="../templates/settings.html">Settings</a></li>
-                          <li><a class="dropdown-item" href="../templates/index.html">Log out</a></li>
+                          <li><a class="dropdown-item" href="/user_profile/{{user.id}}">Personal Page</a></li>
+                          <li><a class="dropdown-item" href="/settings/{{user.id}}">Settings</a></li>
+                          <li><a class="dropdown-item" href="/logout">Log out</a></li>
                       </ul>
                    </li>
-                   
             </div>
         </nav>
     </div>

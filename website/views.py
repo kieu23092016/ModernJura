@@ -6,7 +6,8 @@
 
 "blue print - include URL defined"
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from .models import Game, Img
+from flask_login import login_user, login_required, logout_user, current_user
+from .models import Game, Img, User
 from . import db
 views = Blueprint('views', __name__)
 "run this function whenever go to / route"
@@ -23,18 +24,22 @@ def homePage():
 # user------------------------------------------------------------------------
 @views.route('/home', methods=['GET', 'POST'])
 def home():
-    return render_template('logintoUser.html')
+    return render_template('logintoUser.html', user = current_user)
 
 
-@views.route('/user_profile', methods=['GET', 'POST'])
-def user():
-    return render_template("user.html")
+@views.route('/user_profile/<id>', methods=['GET', 'POST'])
+def user(id):
+    id = id
+    user = User.query.get(id)
+    return render_template("user.html", user = user)
 
 
-@views.route('/settings', methods=['GET', 'POST'])
-def settings():
-    return render_template("settings.html")
+@views.route('/settings/<id>', methods=['GET', 'POST'])
+def settings(id):
+    user = User.query.get(id)
+    return render_template("settings.html", user = user)
 
+# search------------------------------------------------------------------------
 
 @views.route('/search', methods = ['get','post'])
 def search():
@@ -49,7 +54,13 @@ def search():
     print('gamePath',id)
     return render_template("search.html", notes = findData, searchNote = searchNote)
 
-
+@views.route('/gamePage/<id>', methods = ['get','post'])
+def gamePage(id):
+    id = id
+    print('id', id)
+    game = Game.query.get(id)
+    return render_template("GamePage.html", game = game)
+# info------------------------------------------------------------------------
 @views.route('/admin', methods = ['get','post'])
 def addInfor():
     # if request.method == "post":
@@ -63,10 +74,3 @@ def addInfor():
     db.session.add(game)
     db.session.commit()
     return render_template("admin.html")
-
-@views.route('/gamePage/<id>', methods = ['get','post'])
-def gamePage(id):
-    id = id
-    print('id', id)
-    game = Game.query.get(id)
-    return render_template("GamePage.html", game = game)
