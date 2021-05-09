@@ -29,7 +29,7 @@ def contact():
 @views.route('/playGame/<gameID>', methods=['GET', 'POST'])
 def playGame(gameID):
     # if request.method == 'POST':
-    gamePath = Game.query.filter_by(id=id).first().gamePath
+    gamePath = Game.query.filter_by(id=gameID).first().gamePath
     return render_template(gamePath)
 # user------------------------------------------------------------------------
 @views.route('/user_profile/<id>', methods=['GET', 'POST'])
