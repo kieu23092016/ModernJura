@@ -6,98 +6,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/design.css">
 
-    <title>Modern Jura</title>
+    <title>{%block title%}Modern Jura {%endblock %}</title>
+     
 </head>
-<body class = "body" style="background-color: black;">
+<body class="profile-page sidebar-collapse" style="background-color: rgb(1, 0, 15)">
     <div class = "background">
-        <div class = "pinned-header">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#"><img src="../static/images/ModernJura.png" width="70" height="50"></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button> 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
-                                        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
-                                      </svg>
-                                    Home</a>
-                            </li>
-                            
-                            <li class="nav-item py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+    <div class = "pinned-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" style="font-family: monospace;">Modern Jura</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> 
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.html">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+                                    <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
                                   </svg>
-                            </li>
+                                Home</a>
+                        </li>
+                        
+                        
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Genres
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                            </li>
-                        </ul>
-
-
-
-                        <button class="LoginButton" onclick="document.getElementById('id01').style.display='block'">Login</button>
-
-                        <!-- The Modal -->
-                        <div id="id01" class="modal">
-                            <span onclick="document.getElementById('id01').style.display='none'"
-                            class="close" title="Close Modal">&times;</span>
-
-                            <!-- Modal Content -->
-                            <form class="modal-content animate" action="/action_page.php">
-                                <div class="imgcontainer">
-                                    <img src="img_avatar2.png" alt="Avatar" class="avatar">
-                                </div>
-
-                                <div class="container">
-                                    <label for="username"><b>Username</b></label>
-                                    <input type="text" placeholder="Enter Username" name="uname" required>
-
-                                    <label for="password"><b>Password</b></label>
-                                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                                    <button class="LoginButton" type="submit">Login</button>
-                                    <label>
-                                        <input type="checkbox" checked="checked" name="remember"> Remember me
-                                    </label>
-                                </div>
-
-                                <div class="container" style="background-color:#f1f1f1">
-                                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                                    <span class="psw">Forgot <a href="#">password?</a></span>
-                                </div>
-                            </form>
-                        </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" style="color: black;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                GENRES
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#Trending">Trending</a></li>
+                                <li><a class="dropdown-item" href="#Maze">Maze</a></li>
+                                <li><a class="dropdown-item" href="#Shooter">Shooting</a></li>
+                                <li><a class="dropdown-item" href="#Runner">Racing</a></li>
+                                <li><a class="dropdown-item" href="#TowerDefense">Tower Defense</a></li>
+                                <li><a class="dropdown-item" href="#Puzzle">Puzzle</a></li>
+                                <li><a class="dropdown-item" href="#Action">Action</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#YML">You might like</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="../templates/contact.html" style="color: black;">Contact</a>
+                        </li>
+                    </ul>
+                        
+                    </ul>
 
 
+                   
+                    
+                    <a href="../templates/login2.html" target="_blank"><button class="btn btn-light btn btn-primary ms-2"> Login</button></a>
 
+                   
+            </div>
+        </nav>
+    </div>
+    </div>
 
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-
-                        <i class="bi bi-search"></i>
-
-                    </div>
-                </div>
-            </nav>
-        </div>
 
     
     <!-- === BEGIN CONTENT === -->
@@ -168,64 +134,76 @@
         </div>
     </div>
     <!-- === END CONTENT === -->
-    <!-- === END CONTENT === -->
-     <!-- === BEGIN FOOTER === -->
-     <div id="base" class="background-dark text-light" style="font-family: Georgia, 'Times New Roman', Times, serif;">
-        <div class="container padding-vert-30">
-            <div class="row">
-                <!-- Disclaimer -->
-                <div class="col-md-6 margin-bottom-30">
-                    <h3 class="margin-bottom-10">ModernJura</h3>
-                    <p>A web game for you to relax yourself after a hardworking day.</p>
-                    <p>Game for your leisure time.</p>
-                </div>
-                <!-- End Disclaimer -->
-                <div class="col-sm-6 col-md-3 margin-bottom-30"></div>
-                <!-- Friends -->
-                <div class="col-sm-6 col-md-3 margin-bottom-30">
-                    <h3 class="margin-bottom-10">Members</h3>
-                    <ul class="menu">
-                        <li>
-                            <a href="#">Kiều</a>
-                        </li>
-                        <li>
-                            <a href="#">Duyên</a>
-                        </li>
-                        <li>
-                            <a href="#">Hồng Vân</a>
-                        </li>
-                        <li>
-                            <a href="#">Vinh</a>
-                        </li>
-                        <li>
-                            <a href="#">Me</a>
-                        </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <!-- End Friends -->
+   <!-- === BEGIN FOOTER === -->
+   <div id="base" class="text-light" style="font-family: Georgia, 'Times New Roman', Times, serif; background-color: rgb(0, 0, 0);">
+    <div class="container padding-vert-30">
+        <div class="row">
+            <!-- Discription -->
+            <div class="col-md-6 margin-bottom-30 mt-4">
+                <h3 class="margin-bottom-10">ModernJura</h3>
+                <p>A web game for you to relax yourself after a hardworking day.</p>
+                <p>Game for your leisure time.</p>
             </div>
+            <!-- Description -->
+            <div class="col-sm-6 col-md-3 margin-bottom-30"></div>
+            <!-- Member -->
+            <div class="col-sm-6 col-md-3 margin-bottom-30 mt-4">
+                <h3 class="margin-bottom-10">Members</h3>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <a href="https://www.facebook.com/profile.php?id=100008625367362">
+                                <img src="../static/images/Kieu.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="100" width="100">
+                            </a>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="https://www.facebook.com/profile.php?id=100010166261849">
+                                <img src="../static/images/Duyen.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="100" width="100">
+                            </a>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="https://www.facebook.com/profile.php?id=100055028433978">
+                                <img src="../static/images/Van.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="100" width="100">
+                            </a>
+                        </div>
+                    </div> <br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <a href="https://www.facebook.com/profile.php?id=100028263612122">
+                                <img src="../static/images/Vinh.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="100" width="100">
+                            </a>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="https://www.facebook.com/profile.php?id=100040670943536">
+                                <img src="../static/images/Men.jpg" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="100" width="100">
+                            </a>
+                        </div>
+                        
+                        
+                    </div>
+                <div class="clearfix"></div>
+            </div>
+            <!-- End Mem -->
         </div>
     </div>
-    <!-- Footer -->
-    <div id="footer" class="background-dark text-light">
-        <div class="container no-padding">
-            <div class="row">
-                <!-- Copyright -->
-                <a href="#" class="fa fa-facebook"></a>
-                <a href="#" class="fa fa-twitter"></a>
-                <a href="#" class="fa fa-google"></a>
-                <a href="#" class="fa fa-youtube"></a>
+</div>
+<!-- Footer -->
+<div id="footer" class="text-light" style="background-color: black;">
+    <div class="container no-padding">
+        <div class="row">
+            <!-- Copyright -->
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-google"></a>
+            <a href="#" class="fa fa-youtube"></a>
 
-                <div id="copyright">
-                    <p class="pull-right">(c) 2020 Modern Jura copyright</p>
-                </div>
-                <!-- End Copyright -->
+            <div id="copyright">
+                <p class="pull-right">(c) 2020 Modern Jura copyright</p>
             </div>
+            <!-- End Copyright -->
         </div>
-        <!-- End Footer -->
-
-
+    </div>
+    <!-- End Footer -->
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>

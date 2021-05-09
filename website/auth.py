@@ -97,7 +97,7 @@ def sign_up():
         elif re.search(EMAIL_PATTERN, email) is None:
             flash('Email is invalid.', category='error')
         elif re.search(USERNAME_PATTERN, userName) is None:
-            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+            flash('UserName name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
         elif re.search(PASSWORD_PATTERN, password1) is None:
             flash('Password must be from 6-10 characters, have a digit must occur at least , '
                   'a lower case letter must occur at least once, no whitespace allowed in the entire string.',

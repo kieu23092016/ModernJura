@@ -22,7 +22,10 @@ def homePage():
         print(search)
         return redirect(url_for('views.search', search_note=search))
     return render_template("index.html", user = current_user)
-
+@views.route('/contact', methods=['GET', 'POST'])
+def contact():
+    # if request.method == 'POST':
+    return render_template("contact.html", user = current_user)
 # user------------------------------------------------------------------------
 @views.route('/user_profile/<id>', methods=['GET', 'POST'])
 def user(id):
@@ -54,23 +57,24 @@ def search():
 def gamePage(id):
     print('id', id)
     game = Game.query.get(id)
-
+    comments = Comment.query.filter_by(gameID=id).all()
     if request.method == 'POST':
         if current_user.is_authenticated:
             comment = request.form.get('comment')
             if comment:
                 print("comment", comment)
                 now = datetime.now()
-                print(now)
+                print("time",now)
                 newComment = Comment(gameID=id, userID=current_user.id, commentContent=comment, added_date=now)
                 db.session.add(newComment)
                 db.session.commit()
-                return render_template("GamePage.html", game=game, user=current_user, newComment=newComment)
+                return render_template("GamePage.html", game=game, user=current_user, comments=comments)
             # return render_template("GamePage.html", game=game, user=current_user, newComment=None)
         else:
+            flash('you need to login before comment.', category='error')
             print("you need to login before comment.")
             return redirect(url_for('auth.login'))
-    return render_template("GamePage.html", game=game, user=current_user, newComment=None)
+    return render_template("GamePage.html", game=game, user=current_user, newComment=None, comments=comments)
 # info------------------------------------------------------------------------
 @views.route('/admin', methods = ['get','post'])
 def addInfor():
