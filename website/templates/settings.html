@@ -34,7 +34,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index.html">
+                            <a class="nav-link active" aria-current="page" href="/">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                      class="bi bi-house-door" viewBox="0 0 16 16">
                                     <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
@@ -179,31 +179,32 @@
                                 <form class="form" action="##" method="post">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Username</span>
-                                        <input type="text" class="form-control" placeholder="Username" name="userName"
+                                        <input type="text" class="form-control" placeholder="{{ user.userName }}" name="userName"
                                                aria-label="Username" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Date of Birth</span>
-                                        <input type="date" class="form-control" placeholder="Date of Birth"
+                                        <input type="date" class="form-control" placeholder="{{ user.dateOfBirth }}"
                                                name="dateOfBirth" aria-label="Date of Birth"
                                                aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group mb-3">
                                         <label class="input-group-text" for="inputGroupSelect01">Gender</label>
                                         <select class="form-select" id="inputGroupSelect01" name="sex">
-                                            <option selected>Others</option>
-                                            <option value="1">Female</option>
-                                            <option value="2">Male</option>
+                                            <option selected>{{ user.sex }}</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Country</span>
-                                        <input type="text" class="form-control" placeholder="Country" name="country"
+                                        <input type="text" class="form-control" placeholder="{{ user.country }}" name="country"
                                                aria-label="Country" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group">
                                         <span class="input-group-text">Bio</span>
-                                        <textarea class="form-control" name="bio" aria-label="Summary"></textarea>
+                                        <textarea class="form-control" name="bio" aria-label="Summary" placeholder="{{ user.bio }}"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 ml-auto mr-auto">
@@ -228,7 +229,7 @@
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Email</span>
-                                            <input type="text" class="form-control" placeholder="Email" name="email"
+                                            <input type="text" class="form-control" placeholder="{{ user.email }}" name="email"
                                                    aria-label="Email" aria-describedby="basic-addon1">
                                         </div>
 

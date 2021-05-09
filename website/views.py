@@ -26,37 +26,47 @@ def homePage():
 def contact():
     # if request.method == 'POST':
     return render_template("contact.html", user = current_user)
-@views.route('/playGame', methods=['GET', 'POST'])
-def playGame():
+@views.route('/playGame/<gameID>', methods=['GET', 'POST'])
+def playGame(gameID):
     # if request.method == 'POST':
-    return render_template("Spaceship.html")
+    gamePath = Game.query.filter_by(id=id).first().gamePath
+    return render_template(gamePath)
 # user------------------------------------------------------------------------
 @views.route('/user_profile/<id>', methods=['GET', 'POST'])
 def user(id):
-    id = id
     user = User.query.get(id)
     return render_template("user.html", user = user)
+
+@views.route('/login_to_user/<id>')
+def loginToUser(id):
+    user = User.query.get(id)
+    return render_template("logintoUser.html", user=user)
 
 @views.route('gamePage/<id>/addToList')
 def addFavorite(id):
     game = Game.query.filter_by(id=id).first()
     if current_user.is_authenticated:
         #print(number)
-        game.personLikeGame.append(current_user)
-        db.session.commit()
+        exist = False
+        for user in game.personLikeGame:
+            if user.id == current_user.id:
+                exist = True
+        print(exist)
+        if not exist:
+            game.personLikeGame.append(current_user)
+            db.session.commit()
+            flash('Add to favorite successfully!.', category='success')
+        else:
+            game.personLikeGame.remove(current_user)
+            db.session.commit()
+            flash('DELETE game from your favorite list successfully!.', category='success')
         print("đã like nha---------------------------")
-        flash('Add to favorite successfully!.', category='success')
     else:
         print("you need to login before comment.")
         flash('Please login to add your favorite game <3.', category='error')
         return redirect(url_for('auth.login'))
-    return "chuyển trang đc òi"
+    return render_template("GamePage.html", game=game, user=current_user, newComment=None)
 
-#
-# @views.route('/settings/<id>', methods=['GET', 'POST'])
-# def settings(id):
-#     user = User.query.get(id)
-#     return render_template("settings.html", user = user)
 
 # search------------------------------------------------------------------------
 @views.route('/search', methods = ['get','post'])
