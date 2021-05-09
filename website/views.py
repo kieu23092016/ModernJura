@@ -26,10 +26,10 @@ def homePage():
 def contact():
     # if request.method == 'POST':
     return render_template("contact.html", user = current_user)
-@views.route('/playGame/<gameID>', methods=['GET', 'POST'])
+@views.route('/playGame', methods=['GET', 'POST'])
 def playGame():
     # if request.method == 'POST':
-    return render_template("Snake.html")
+    return render_template("Spaceship.html")
 # user------------------------------------------------------------------------
 @views.route('/user_profile/<id>', methods=['GET', 'POST'])
 def user(id):
