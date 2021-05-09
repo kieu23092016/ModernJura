@@ -209,18 +209,15 @@ def settings(id):
         # userName, date of birth, email, password, password 2
         duplicateUsername = User.query.filter_by(userName=userName).first()
         duplicateEmail = User.query.filter_by(email=email).first()
-        # if duplicateUsername and (duplicateUsername != user):
+        # if duplicateUsername and (duplicateUsername != userName):
         #     print("duplicateUsername")
         #     #flash('This user name is already exists. Please choose another name.', category='error')
-        # elif duplicateEmail and (duplicateEmail != user):
+        # elif duplicateEmail and (duplicateEmail != email):
         #     print("duplicateEmail")
         #     flash('Email already exists.', category='error')
         # elif re.search(EMAIL_PATTERN, email) is None:
         #     print("email none")
         #     flash('Email is invalid.', category='error')
-        # elif re.search(USERNAME_PATTERN, userName) is None:
-        #     print("user is none")
-        #     flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
         # elif re.search(PASSWORD_PATTERN, password) is None:
         #     print("password")
         #     flash('Password must be from 6-10 characters, have a digit must occur at least , '
@@ -230,17 +227,19 @@ def settings(id):
         #     print("not match")
         #     flash('Passwords don\'t match.', category='error')
         # else:
-        print("begin to fix")
-        current_user.userName = userName
-        current_user.email = email
-        current_user.password = generate_password_hash(password, method='sha256')
+        #     current_user.email = email
+        #     current_user.password = generate_password_hash(password, method='sha256')
+        # if re.search(USERNAME_PATTERN, userName) is None:
+        #     print("user is none")
+        #     flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+        # else:
+        #     current_user.userName = userName
+
         current_user.sex = sex
-        print(8)
         print("avatar",avatar)
         if avatar:
-            upload_avatar(id, avatar)
+            upload_avatar(current_user, avatar)
             print("not null avatar")
-
         if dateOfBirth:
             #print("kiểu của dữ liệu truyền vào ô date of birth:", dateOfBirth.content_type)
             #user.dateOfBirth = dateOfBirth
@@ -256,7 +255,7 @@ def settings(id):
     return render_template("settings.html", user=current_user)
 
 
-def upload_avatar(userID, upload_a):
+def upload_avatar(currentUser, upload_a):
     target = os.path.join(VIEW_ROOT, 'static\\images\\user_avatars')
     print(target)
     if not os.path.isdir(target):
@@ -272,12 +271,11 @@ def upload_avatar(userID, upload_a):
     if not ((filetype == match[0]) or (filetype == match[1]) or (filetype == match[2]) or (filetype == match[3])):
         print("------------------wrong type----------------")
     else:
-        player = User.query.filter_by(id=userID).first()
-        avt_name = "user" + str(player.id) + ".jpg"
+        avt_name = "user" + str(currentUser.id) + ".jpg"
         destination = "/".join([target, avt_name])
         # lưu ảnh vào folder đã chọn
         upload_a.save(destination)
         # lưu ảnh vào cơ sở dữ liệu
-        player.avatar = avt_name
+        currentUser.avatar = "../static/images/user_avatars/"+avt_name
         db.session.commit()
         print("this file upload successfully!")

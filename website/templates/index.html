@@ -72,7 +72,7 @@
                     {%if user.is_authenticated%}
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <img src="../static/images/ava.png" alt="Circle Image" class="img-raised rounded-circle img-fluid" height="50" width="50">
+                          <img src={{user.avatar}} alt="Circle Image" class="img-raised rounded-circle img-fluid" height="50" width="50">
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                           <li><a class="dropdown-item" href="/user_profile/{{user.id}}">Personal Page</a></li>
