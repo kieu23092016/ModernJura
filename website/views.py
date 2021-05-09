@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import Game, User, Comment
 from . import db
+from datetime import datetime
 import os, re
 views = Blueprint('views', __name__)
 "run this function whenever go to / route"
@@ -51,15 +52,25 @@ def search():
 
 @views.route('/gamePage/<id>', methods = ['get','post'])
 def gamePage(id):
-    id = id
     print('id', id)
     game = Game.query.get(id)
-    comment = request.form.get('comment')
-    print("comment",comment)
-    newComment = Comment(commentContent = comment)
-    db.session.add(newComment)
-    db.session.commit()
-    return render_template("GamePage.html", game = game, user = current_user, newComment = newComment)
+
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            comment = request.form.get('comment')
+            if comment:
+                print("comment", comment)
+                now = datetime.now()
+                print(now)
+                newComment = Comment(gameID=id, userID=current_user.id, commentContent=comment, added_date=now)
+                db.session.add(newComment)
+                db.session.commit()
+                return render_template("GamePage.html", game=game, user=current_user, newComment=newComment)
+            # return render_template("GamePage.html", game=game, user=current_user, newComment=None)
+        else:
+            print("you need to login before comment.")
+            return redirect(url_for('auth.login'))
+    return render_template("GamePage.html", game=game, user=current_user, newComment=None)
 # info------------------------------------------------------------------------
 @views.route('/admin', methods = ['get','post'])
 def addInfor():
