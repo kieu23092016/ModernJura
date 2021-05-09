@@ -8,6 +8,8 @@ import os
 import re
 import smtplib
 
+from datetime import date
+
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -194,7 +196,7 @@ def reset_password(token):
 
 @auth.route('/settings/<id>', methods=['GET', 'POST'])
 def settings(id):
-    # user = User.query.get(id)
+    user = User.query.get(id)
     if request.method == 'POST':
         avatar = request.files.get('avatar')
         userName = request.form.get('userName')
@@ -209,49 +211,48 @@ def settings(id):
         # userName, date of birth, email, password, password 2
         duplicateUsername = User.query.filter_by(userName=userName).first()
         duplicateEmail = User.query.filter_by(email=email).first()
-        # if duplicateUsername and (duplicateUsername != userName):
-        #     print("duplicateUsername")
-        #     #flash('This user name is already exists. Please choose another name.', category='error')
-        # elif duplicateEmail and (duplicateEmail != email):
-        #     print("duplicateEmail")
-        #     flash('Email already exists.', category='error')
-        # elif re.search(EMAIL_PATTERN, email) is None:
-        #     print("email none")
-        #     flash('Email is invalid.', category='error')
-        # elif re.search(PASSWORD_PATTERN, password) is None:
-        #     print("password")
-        #     flash('Password must be from 6-10 characters, have a digit must occur at least , '
-        #           'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
-        #           category='error')
-        # elif password != password2:
-        #     print("not match")
-        #     flash('Passwords don\'t match.', category='error')
-        # else:
-        #     current_user.email = email
-        #     current_user.password = generate_password_hash(password, method='sha256')
-        # if re.search(USERNAME_PATTERN, userName) is None:
-        #     print("user is none")
-        #     flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
-        # else:
-        #     current_user.userName = userName
+        if duplicateUsername and (duplicateUsername != user):
+            print("duplicateUsername")
+            #flash('This user name is already exists. Please choose another name.', category='error')
+        elif duplicateEmail and (duplicateEmail != user):
+            print("duplicateEmail")
+            flash('Email already exists.', category='error')
+        elif re.search(EMAIL_PATTERN, email) is None:
+            print("email none")
+            flash('Email is invalid.', category='error')
+        elif re.search(PASSWORD_PATTERN, password) is None:
+            print("password")
+            flash('Password must be from 6-10 characters, have a digit must occur at least , '
+                  'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
+                  category='error')
+        elif password != password2:
+            print("not match")
+            flash('Passwords don\'t match.', category='error')
+        else:
+            current_user.email = email
+            current_user.password = generate_password_hash(password, method='sha256')
+        if re.search(USERNAME_PATTERN, userName) is None:
+            print("user is none")
+            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+        else:
+            current_user.userName = userName
 
-        current_user.sex = sex
-        print("avatar",avatar)
-        if avatar:
-            upload_avatar(current_user, avatar)
-            print("not null avatar")
-        if dateOfBirth:
-            #print("kiểu của dữ liệu truyền vào ô date of birth:", dateOfBirth.content_type)
-            #user.dateOfBirth = dateOfBirth
-            print(10)
-        if country:
-            current_user.country = country
-            print(11)
-        if bio:
-            current_user.bio = bio
-            print(12)
-        db.session.commit()
-        print(13)
+            current_user.sex = sex
+            print("avatar",avatar)
+            if avatar:
+                upload_avatar(current_user, avatar)
+                print("not null avatar")
+            if dateOfBirth:
+                current_user.dateOfBirth = dateOfBirth
+                print(10)
+            if country:
+                current_user.country = country
+                print(11)
+            if bio:
+                current_user.bio = bio
+                print(12)
+            db.session.commit()
+            print(13)
     return render_template("settings.html", user=current_user)
 
 
@@ -271,7 +272,9 @@ def upload_avatar(currentUser, upload_a):
     if not ((filetype == match[0]) or (filetype == match[1]) or (filetype == match[2]) or (filetype == match[3])):
         print("------------------wrong type----------------")
     else:
-        avt_name = "user" + str(currentUser.id) + ".jpg"
+        avt_name = upload_a.filename
+
+        #avt_name = "user" + str(currentUser.id) + ".jpg"
         destination = "/".join([target, avt_name])
         # lưu ảnh vào folder đã chọn
         upload_a.save(destination)

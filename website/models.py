@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     userName = db.Column(db.String(150), unique=True)
-    dateOfBirth = db.Column(db.Date)
+    dateOfBirth = db.Column(db.String)
     country = db.Column(db.String(100))
     bio = db.Column(db.String(100))
     link = db.Column(db.String(100000))

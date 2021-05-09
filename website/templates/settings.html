@@ -92,7 +92,7 @@
                                      height="150" width="150">
                                 <!-- <input type="file" name="avatar" class="text-center center-block file-upload my-h">-->
                                 <!-- File upload form -->
-                                <form method="post" action="/settings/<id>" enctype="multipart/form-data" class="form-inline">
+                                <form method="post" action="/settings/{{ user.id }}" enctype="multipart/form-data" class="form-inline">
                                     <label>Choose Images: </label>
                                     <input type="file" name="avatar" id="image" class="form-control" multiple>
                                     <input type="submit" name="submit" class="btn btn-success" value="UPLOAD"/>
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Date of Birth</span>
-                                        <input type="text" class="form-control" placeholder="Date of Birth"
+                                        <input type="date" class="form-control" placeholder="Date of Birth"
                                                name="dateOfBirth" aria-label="Date of Birth"
                                                aria-describedby="basic-addon1">
                                     </div>
