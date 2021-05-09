@@ -26,6 +26,10 @@ def homePage():
 def contact():
     # if request.method == 'POST':
     return render_template("contact.html", user = current_user)
+@views.route('/playGame/<gameID>', methods=['GET', 'POST'])
+def playGame():
+    # if request.method == 'POST':
+    return render_template("Snake.html")
 # user------------------------------------------------------------------------
 @views.route('/user_profile/<id>', methods=['GET', 'POST'])
 def user(id):
@@ -99,8 +103,9 @@ def addInfor():
     description = request.form.get('description')
     tag = request.form.get('tag')
     gameImgPath = request.form.get('gameImgPath')
+    videoPath = request.form.get('videoPath')
     gamePath = request.form.get('gamePath')
-    game = Game(gameName = gameName, description = description, tag = tag, gameImgPath = gameImgPath, gamePath=gamePath)
+    game = Game(gameName = gameName, description = description, tag = tag, gameImgPath = gameImgPath, gamePath=gamePath, videoPath = videoPath)
     db.session.add(game)
     db.session.commit()
     return render_template("admin.html")

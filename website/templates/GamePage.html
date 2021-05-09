@@ -102,8 +102,8 @@
 <header class="header">
     <div class="container">
             <span style="object-fit:fill;" class="py-2">
-                <img src="../static/images/snake-crop.jpg">
-                    <a class="btn btn-dark" href="../templates/Snake.html" target="_blank"><i class="fa fa-plus-circle"
+                <img src="{{game.gameImgPath}}" height="453" width="1366">
+                    <a class="btn btn-dark" href="/playGame/{id}" target="_blank"><i class="fa fa-plus-circle"
                                                                                               aria-hidden="true"></i> Play</a>
                     <a class="btn btn-dark" href="{{ game.id }}/addToList" target="_blank"><i class="fa fa-play" aria-hidden="true"></i>Add to List</a>
             </span>
