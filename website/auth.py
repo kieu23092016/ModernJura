@@ -44,11 +44,12 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 auth = Blueprint('auth', __name__)
 
 
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         if current_user.is_authenticated:
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.homePage'))
 
         email = request.form.get('email')
         password = request.form.get('password')
@@ -58,7 +59,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                return redirect(url_for('views.home'))
+                return redirect(url_for('views.homePage'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
@@ -235,7 +236,7 @@ def settings(id):
             user.userName = userName
             user.email = email
             user.password = generate_password_hash(password, method='sha256')
-            user.genre = genre
+            user.sex = genre
             print(8)
             print(avatar)
             if avatar:
