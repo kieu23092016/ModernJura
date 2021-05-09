@@ -97,7 +97,7 @@ def sign_up():
         elif re.search(EMAIL_PATTERN, email) is None:
             flash('Email is invalid.', category='error')
         elif re.search(USERNAME_PATTERN, userName) is None:
-            flash('UserName name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
         elif re.search(PASSWORD_PATTERN, password1) is None:
             flash('Password must be from 6-10 characters, have a digit must occur at least , '
                   'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
@@ -208,51 +208,61 @@ def settings(id):
         password = request.form.get('password')
         password2 = request.form.get('password2')
 
-        # userName, date of birth, email, password, password 2
-        duplicateUsername = User.query.filter_by(userName=userName).first()
-        duplicateEmail = User.query.filter_by(email=email).first()
-        if duplicateUsername and (duplicateUsername != user):
-            print("duplicateUsername")
-            #flash('This user name is already exists. Please choose another name.', category='error')
-        elif duplicateEmail and (duplicateEmail != user):
-            print("duplicateEmail")
-            flash('Email already exists.', category='error')
-        elif re.search(EMAIL_PATTERN, email) is None:
-            print("email none")
-            flash('Email is invalid.', category='error')
-        elif re.search(PASSWORD_PATTERN, password) is None:
-            print("password")
-            flash('Password must be from 6-10 characters, have a digit must occur at least , '
-                  'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
-                  category='error')
-        elif password != password2:
-            print("not match")
-            flash('Passwords don\'t match.', category='error')
-        else:
-            current_user.email = email
-            current_user.password = generate_password_hash(password, method='sha256')
-        if re.search(USERNAME_PATTERN, userName) is None:
-            print("user is none")
-            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
-        else:
-            current_user.userName = userName
+        current_user.sex = sex
+        print("avatar", avatar)
+        if avatar:
+            upload_avatar(current_user, avatar)
+            print("not null avatar")
+        if dateOfBirth:
+            current_user.dateOfBirth = dateOfBirth
+            print(10)
+        if country:
+            current_user.country = country
+            print(11)
+        if bio:
+            current_user.bio = bio
+            print(12)
+        db.session.commit()
+        print(13)
 
-            current_user.sex = sex
-            print("avatar",avatar)
-            if avatar:
-                upload_avatar(current_user, avatar)
-                print("not null avatar")
-            if dateOfBirth:
-                current_user.dateOfBirth = dateOfBirth
-                print(10)
-            if country:
-                current_user.country = country
-                print(11)
-            if bio:
-                current_user.bio = bio
-                print(12)
-            db.session.commit()
-            print(13)
+        if email:
+            duplicateEmail = User.query.filter_by(email=email).first()
+            if duplicateEmail and (duplicateEmail != user):
+                print("duplicateEmail")
+                flash('Email already exists.', category='error')
+            elif re.search(EMAIL_PATTERN, email) is None:
+                print("email none")
+                flash('Email is invalid.', category='error')
+            else:
+                current_user.email = email
+                print(14)
+        if userName:
+            duplicateUsername = User.query.filter_by(userName=userName).first()
+            if duplicateUsername and (duplicateUsername != user):
+                print("duplicateUsername")
+                flash('This user name is already exists. Please choose another name.', category='error')
+            elif re.search(USERNAME_PATTERN, userName) is None:
+                print("user is none")
+                flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+            else:
+                current_user.userName = userName
+                print(15)
+        # userName, date of birth, email, password, password 2
+        if password:
+            if re.search(PASSWORD_PATTERN, password) is None:
+                print("password")
+                flash('Password must be from 6-10 characters, have a digit must occur at least , '
+                      'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
+                      category='error')
+            elif password != password2:
+                print("not match")
+                flash('Passwords don\'t match.', category='error')
+            else:
+                current_user.password = generate_password_hash(password, method='sha256')
+                print(16)
+        print(17)
+        db.session.commit()
+        print(18)
     return render_template("settings.html", user=current_user)
 
 

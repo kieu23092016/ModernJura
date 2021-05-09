@@ -33,6 +33,21 @@ def user(id):
     user = User.query.get(id)
     return render_template("user.html", user = user)
 
+@views.route('gamePage/<id>/addToList')
+def addFavorite(id):
+    game = Game.query.filter_by(id=id).first()
+    if current_user.is_authenticated:
+        #print(number)
+        game.personLikeGame.append(current_user)
+        db.session.commit()
+        print("đã like nha---------------------------")
+        flash('Add to favorite successfully!.', category='success')
+    else:
+        print("you need to login before comment.")
+        flash('Please login to add your favorite game <3.', category='error')
+        return redirect(url_for('auth.login'))
+    return "chuyển trang đc òi"
+
 #
 # @views.route('/settings/<id>', methods=['GET', 'POST'])
 # def settings(id):

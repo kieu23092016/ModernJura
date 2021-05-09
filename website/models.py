@@ -1,10 +1,7 @@
 from . import db
 from flask_login import UserMixin
 
-favorite = db.Table('favorite',
-                db.Column('userId',db.Integer, db.ForeignKey('user.id'), primary_key = True),
-                db.Column('gameID',db.Integer, db.ForeignKey('game.id'), primary_key = True)
-                )
+
 
 player = db.Table('player',
     db.Column('playerID',db.Integer, db.ForeignKey('user.id'), primary_key = True),
@@ -20,20 +17,33 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
 
+favorite = db.Table('favorite',
+                db.Column('userId',db.Integer, db.ForeignKey('user.id')),
+                db.Column('gameID',db.Integer, db.ForeignKey('game.id'))
+                )
+
 class User(db.Model, UserMixin):
+
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
+    avatar = db.Column(db.String)
+
     userName = db.Column(db.String(150), unique=True)
     dateOfBirth = db.Column(db.String)
+    sex = db.Column(db.String(15))  # giới tính là nam, nữ, không muốn nói
     country = db.Column(db.String(100))
     bio = db.Column(db.String(100))
     link = db.Column(db.String(100000))
-    sex = db.Column(db.String(15))  # giới tính là nam, nữ, không muốn nói
+
+    email = db.Column(db.String(150), unique=True)
+    password = db.Column(db.String(150))
+
     gameComment = db.relationship(Comment)
-    favoriteList = db.relationship('Game', secondary = favorite)
-    gameScore = db.relationship('Game', secondary = player)
-    avatar = db.Column(db.Integer, db.ForeignKey('img.id'))
+    # favoriteList = db.relationship('Game', secondary = favorite)
+    favoriteList = db.relationship('Game', secondary=favorite,
+                                   backref=db.backref('personLikeGame', lazy='dynamic'))
+    gameScore = db.relationship('Game', secondary = player,
+                                backref=db.backref('personPlayScore', lazy='dynamic'))
+
 
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,8 +54,8 @@ class Game(db.Model):
     gameImgPath = db.Column(db.String(1000))
     gameComment = db.relationship(Comment)
     rankingScore = db.relationship('User', secondary = player)
-    # introVideo = db.Column()
-    pictureID = db.Column(db.Integer, db.ForeignKey('img.id'))
+    videoPath = db.Column(db.String)
+
 
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
