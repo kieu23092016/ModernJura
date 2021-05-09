@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import Game, User, Comment
 from . import db
+import os, re
 views = Blueprint('views', __name__)
 "run this function whenever go to / route"
 
@@ -35,6 +36,39 @@ def user(id):
 #     return render_template("settings.html", user = user)
 
 # search------------------------------------------------------------------------
+@views.route('/settings', methods=['GET', 'POST'])
+def settings():
+    return render_template("settings.html")
+
+
+@views.route('/upload_avatar', methods=['GET', 'POST'])
+def upload_avatar():
+    if request.method == 'POST':
+        target = os.path.join(VIEW_ROOT, 'static\\images\\user_avatars')
+        print(target)
+        if not os.path.isdir(target):
+            os.mkdir(target)
+        else:
+            print('couldn\'t create upload directory: {}'.format(target))
+        upload_a = request.files.get('file')
+        print("{} is the file name".format(upload_a.filename))
+        # match dùng để kiểm tra tệp có hợp lệ không
+        match = ["image/jpeg", "image/png", "image/jpg", "image/gif"]
+        filetype = upload_a.content_type
+        # print("Đây là loại của tệp nhaaaaaaaaaaaaaaaaaaaaaaaaa: ", filetype)
+        if not ((filetype == match[0]) or (filetype == match[1]) or (filetype == match[2]) or (filetype == match[3])):
+            return "------------------wrong type----------------"
+        else:
+            player = User.query.filter_by(id=1).first()
+            avt_name = "user" + str(player.id) + ".jpg"
+            destination = "/".join([target, avt_name])
+            # lưu ảnh vào folder đã chọn
+            upload_a.save(destination)
+            # lưu ảnh vào cơ sở dữ liệu
+            player.avatar_image = avt_name
+            db.session.commit()
+            return "this file upload successfully!"
+    return render_template('temp_uploadImage.html')
 
 @views.route('/search', methods = ['get','post'])
 def search():

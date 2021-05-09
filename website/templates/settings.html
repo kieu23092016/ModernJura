@@ -34,7 +34,7 @@
 
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Genres
                             </a>
@@ -52,18 +52,16 @@
                         </li>
 
                     </ul>
-
-
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             <img src="../static/images/ava.png" alt="Circle Image"
                                  class="img-raised rounded-circle img-fluid" height="50" width="50">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="../templates/user.html">Personal Page</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Log out</a></li>
+                            <li><a class="dropdown-item" href="/user_profile/{{user.id}}">Personal Page</a></li>
+                            <li><a class="dropdown-item" href="/settings/{{user.id}}">Settings</a></li>
+                            <li><a class="dropdown-item" href="/logout">Log out</a></li>
                         </ul>
                     </li>
                 </div>
@@ -80,19 +78,43 @@
                 <div class="col-md-6 ml-auto mr-auto">
                     <div class="profile">
                         <div class="text-center">
+                            <!--                            sửa ảnh-->
                             <div class="avatar">
                                 <img src="../static/images/ava.png" alt="Circle Image"
                                      class="img-raised rounded-circle img-fluid">
                                 <input type="file" name="avatar" class="text-center center-block file-upload my-h">
-
-
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p>
+                                            {% with messages = get_flashed_messages() %}
+                                            {% if messages %}
+                                            {% for message in messages %}
+                                        <div class="alert alert-success">
+                                            <strong>{{ message }}</strong>
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% endwith %}
+                                        </p>
+                                        <div>
+                                            <!-- File upload form -->
+                                            <form method="post" action="/upload_avatar" enctype="multipart/form-data"
+                                                  class="form-inline">
+                                                <div class="form-group">
+                                                    <label>Choose Images: </label>
+                                                    <input type="file" name="file" id="image" class="form-control"
+                                                           multiple>
+                                                </div>
+                                                <input type="submit" name="submit" class="btn btn-success"
+                                                       value="UPLOAD"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
-
-
                         <div class="name">
-                            <h3 class="title">Chika Chika</h3>
+                            <h3 class="title">{{user.userName}}</h3>
                             <h6>Let's play together</h6>
                             <a href="#pablo" class="btn btn-just-icon btn-link btn-dribbble">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -114,9 +136,7 @@
                                 </i></a>
 
                         </div>
-
                     </div>
-
                 </div>
                 <div class="description text-center mt-5">
 
@@ -126,18 +146,10 @@
                 </div>
             </div>
 
-
             <div class="container bootstrap snippet">
-
-
                 <div class="row">
-
                     <div class="col-sm-3"><!--left col-->
-
-
                         </hr><br>
-
-
                         <div class="tab-content tab-space">
                             <div class="tab-pane work active show" id="work">
                                 <ul class="list-group">
@@ -152,7 +164,6 @@
                                 </ul>
                             </div>
                         </div>
-
                         <div class="panel panel-default">
                             <div class="panel-heading"><h5>Social Media</h5></div>
                             <div class="panel-body">
@@ -160,11 +171,8 @@
                                     class="fa fa-instagram fa-2x"></i>
                             </div>
                         </div>
-
                     </div><!--/col-3-->
                     <div class="col-sm-9">
-
-
                         <div class="tab-content">
                             <div class="row">
                                 <div class="col-md-12 ml-auto mr-auto">
@@ -175,41 +183,40 @@
                                                     <i class="fa fa-info" aria-hidden="true"></i> Profile
                                                 </a>
                                             </li>
-
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <div class="tab-pane active" id="home">
-
-                                <form class="form" action="##" method="post" id="registrationForm">
+                                <!--user change information                                             -->
+                                <form class="form" action="##" method="post">
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Username</span>
+                                        <span class="input-group-text">Username</span>
                                         <input type="text" class="form-control" placeholder="Username" name="userName"
                                                aria-label="Username" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Date of Birth</span>
+                                        <span class="input-group-text">Date of Birth</span>
                                         <input type="text" class="form-control" placeholder="Date of Birth"
                                                name="dateOfBirth" aria-label="Date of Birth"
                                                aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group mb-3">
-                                        <label class="input-group-text" for="inputGroupSelect01">Genres</label>
-                                        <select class="form-select" id="inputGroupSelect01" name="genre">
+                                        <label class="input-group-text" for="inputGroupSelect01">Gender</label>
+                                        <select class="form-select" id="inputGroupSelect01" name="sex">
                                             <option selected>Others</option>
                                             <option value="1">Female</option>
                                             <option value="2">Male</option>
                                         </select>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Country</span>
+                                        <span class="input-group-text">Country</span>
                                         <input type="text" class="form-control" placeholder="Country" name="country"
                                                aria-label="Country" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="input-group">
-                                        <span class="input-group-text">Summary</span>
+                                        <span class="input-group-text">Bio</span>
                                         <textarea class="form-control" name="bio" aria-label="Summary"></textarea>
                                     </div>
                                     <div class="row">
@@ -230,17 +237,18 @@
                                         </div>
                                     </div>
                                     <br>
+                                    <!--                                    registration Form-->
                                     <form class="form" action="##" method="post" id="registrationForm">
 
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">Email</span>
+                                            <span class="input-group-text">Email</span>
                                             <input type="text" class="form-control" placeholder="Email" name="email"
                                                    aria-label="Email" aria-describedby="basic-addon1">
                                         </div>
 
 
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">Password</span>
+                                            <span class="input-group-text">Password</span>
                                             <input type="password" class="form-control" name="password" id="password"
                                                    placeholder="password" title="enter your password.">
 
@@ -263,8 +271,8 @@
                                             </div>
                                         </div>
                                     </form>
-
-                                    <hr>
+                                </form>
+                                <hr>
 
                             </div><!--/tab-pane-->
 

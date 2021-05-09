@@ -194,16 +194,14 @@ def reset_password(token):
 
 @auth.route('/settings/<id>', methods=['GET', 'POST'])
 def settings(id):
-    user = User.query.get(id)
+    # user = User.query.get(id)
     if request.method == 'POST':
         avatar = request.files.get('avatar')
-
         userName = request.form.get('userName')
         dateOfBirth = request.form.get('dateOfBirth')
-        genre = request.form.get('genre')
+        sex = request.form.get('sex')
         country = request.form.get('country')
-        summary = request.form.get('bio')
-
+        bio = request.form.get('bio')
         email = request.form.get('email')
         password = request.form.get('password')
         password2 = request.form.get('password2')
@@ -211,54 +209,51 @@ def settings(id):
         # userName, date of birth, email, password, password 2
         duplicateUsername = User.query.filter_by(userName=userName).first()
         duplicateEmail = User.query.filter_by(email=email).first()
-        if duplicateUsername and (duplicateUsername != user):
-            print(1)
-            #flash('This user name is already exists. Please choose another name.', category='error')
-        elif duplicateEmail and (duplicateEmail != user):
-            print(2)
-            flash('Email already exists.', category='error')
-        elif re.search(EMAIL_PATTERN, email) is None:
-            print(3)
-            flash('Email is invalid.', category='error')
-        elif re.search(USERNAME_PATTERN, userName) is None:
-            print(4)
-            flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
-        elif re.search(PASSWORD_PATTERN, password) is None:
-            print(5)
-            flash('Password must be from 6-10 characters, have a digit must occur at least , '
-                  'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
-                  category='error')
-        elif password != password2:
-            print(6)
-            flash('Passwords don\'t match.', category='error')
-        else:
-            print(7)
-            user.userName = userName
-            user.email = email
-            user.password = generate_password_hash(password, method='sha256')
-            user.sex = genre
-            print(8)
-            print(avatar)
-            if avatar:
-                upload_avatar(id, avatar)
-                print(9)
+        # if duplicateUsername and (duplicateUsername != user):
+        #     print("duplicateUsername")
+        #     #flash('This user name is already exists. Please choose another name.', category='error')
+        # elif duplicateEmail and (duplicateEmail != user):
+        #     print("duplicateEmail")
+        #     flash('Email already exists.', category='error')
+        # elif re.search(EMAIL_PATTERN, email) is None:
+        #     print("email none")
+        #     flash('Email is invalid.', category='error')
+        # elif re.search(USERNAME_PATTERN, userName) is None:
+        #     print("user is none")
+        #     flash('First name must contain alphabets, digits and dash, from 3 to 16 characters.', category='error')
+        # elif re.search(PASSWORD_PATTERN, password) is None:
+        #     print("password")
+        #     flash('Password must be from 6-10 characters, have a digit must occur at least , '
+        #           'a lower case letter must occur at least once, no whitespace allowed in the entire string.',
+        #           category='error')
+        # elif password != password2:
+        #     print("not match")
+        #     flash('Passwords don\'t match.', category='error')
+        # else:
+        print("begin to fix")
+        current_user.userName = userName
+        current_user.email = email
+        current_user.password = generate_password_hash(password, method='sha256')
+        current_user.sex = sex
+        print(8)
+        print("avatar",avatar)
+        if avatar:
+            upload_avatar(id, avatar)
+            print("not null avatar")
 
-            if dateOfBirth:
-                #print("kiểu của dữ liệu truyền vào ô date of birth:", dateOfBirth.content_type)
-                #user.dateOfBirth = dateOfBirth
-                print(10)
-
-            if country:
-                user.country = country
-                print(11)
-
-            if summary:
-                user.bio = summary
-                print(12)
-
-            db.session.commit()
-            print(13)
-    return render_template("settings.html", user=user)
+        if dateOfBirth:
+            #print("kiểu của dữ liệu truyền vào ô date of birth:", dateOfBirth.content_type)
+            #user.dateOfBirth = dateOfBirth
+            print(10)
+        if country:
+            current_user.country = country
+            print(11)
+        if bio:
+            current_user.bio = bio
+            print(12)
+        db.session.commit()
+        print(13)
+    return render_template("settings.html", user=current_user)
 
 
 def upload_avatar(userID, upload_a):
